@@ -1,83 +1,109 @@
-// App.jsx — Music Practice Framework shell
-// Top nav with four modules + a global instrument choice (sax / trumpet / none).
-// The Practice module stays mounted across tab switches so an in-flight
-// session isn't lost; the other modules mount on demand.
+// ─────────────────────────────────────────────────────────────────────────────
+// App.jsx — session-first shell.
+//
+// "Start Session" IS the app: the guided session flow fills the main area and
+// stays mounted across navigation so an in-flight session is never lost.
+// Reference tabs (Songs / Fingerings / Schedule / Progress) live in a slim
+// side rail, clearly subordinate — browse-anytime libraries, not the product.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import React, { useState, useEffect } from 'react'
-import './styles/shell.css'
-import PracticeApp   from './practice/PracticeApp'
-import SongsApp      from './songs/SongsApp'
+import './styles/app.css'
+import SessionFlow from './session/SessionFlow'
+import SongsApp from './songs/SongsApp'
 import FingeringsApp from './fingerings/FingeringsApp'
-import ProgressApp   from './progress/ProgressApp'
+import ScheduleTab from './tabs/ScheduleTab'
+import ProgressTab from './tabs/ProgressTab'
+import { INSTRUMENT_CHOICES } from './theory/instruments'
+import { loadSettings, saveSettings } from './state/settingsStore'
+import { loadSessions } from './state/sessionStore'
 
-const TABS = [
-  { id: 'practice',   label: 'Practice'   },
-  { id: 'songs',      label: 'Songs'      },
-  { id: 'fingerings', label: 'Fingerings' },
-  { id: 'progress',   label: 'Progress'   },
+const REFERENCE_TABS = [
+  { id: 'songs',      label: 'Songs',      icon: '𝄞' },
+  { id: 'fingerings', label: 'Fingerings', icon: '☰' },
+  { id: 'schedule',   label: 'Schedule',   icon: '▦' },
+  { id: 'progress',   label: 'Progress',   icon: '↗' },
 ]
-
-const INSTRUMENTS = [
-  { id: 'sax',     label: '🎷 Tenor Sax'    },
-  { id: 'trumpet', label: '🎺 Trumpet'      },
-  { id: 'none',    label: '🎧 No Instrument' },
-]
-
-const LS_INSTRUMENT = 'mpf_instrument'
-
-function initialTab() {
-  const t = new URLSearchParams(window.location.search).get('tab')
-  return TABS.some(x => x.id === t) ? t : 'practice'
-}
 
 export default function App() {
-  const [tab, setTab] = useState(initialTab)
-  const [instrument, setInstrument] = useState(
-    () => localStorage.getItem(LS_INSTRUMENT) || 'sax'
-  )
+  const [view, setView] = useState('session')
+  const [settings, setSettings] = useState(loadSettings)
+  const [sessions, setSessions] = useState(loadSessions)
+  const [sessionStage, setSessionStage] = useState('setup')
 
-  useEffect(() => {
-    localStorage.setItem(LS_INSTRUMENT, instrument)
-  }, [instrument])
+  const { instrument, voice } = settings
 
-  // Sax and trumpet are both Bb instruments → default song charts to Bb
+  useEffect(() => { saveSettings(settings) }, [settings])
+
+  const setInstrument = id => setSettings(s => ({ ...s, instrument: id }))
+  const setVoice = id => setSettings(s => ({ ...s, voice: id }))
+
+  // Sax and trumpet are both Bb instruments → song charts default to Bb.
   const songTranspose = instrument === 'none' ? 'concert' : 'bb'
+  // Lock the instrument only while actually practicing (the plan preview
+  // rebuilds itself if the instrument changes).
+  const sessionActive = ['run', 'critique', 'reflect'].includes(sessionStage)
 
   return (
-    <div className="mpf-root">
-      <nav className="mpf-nav">
-        <span className="mpf-brand">♪ Music Practice</span>
-        <div className="mpf-tabs">
-          {TABS.map(t => (
-            <button
-              key={t.id}
-              className={`mpf-tab ${tab === t.id ? 'active' : ''}`}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
+    <div className="app-root">
+      {/* ── Side rail ─────────────────────────────────────────────────── */}
+      <aside className="rail">
+        <div className="rail-brand">♪ Practice<br /><span>Framework</span></div>
+
+        <button
+          className={`rail-start ${view === 'session' ? 'rail-start--active' : ''}`}
+          onClick={() => setView('session')}>
+          <span className="rail-start-icon">▶</span>
+          <span>
+            {sessionActive ? 'Session in progress' : 'Start Session'}
+            {sessionActive && <em className="rail-live">● live</em>}
+          </span>
+        </button>
+
+        <nav className="rail-tabs">
+          <div className="rail-tabs-label">Reference</div>
+          {REFERENCE_TABS.map(t => (
+            <button key={t.id}
+              className={`rail-tab ${view === t.id ? 'rail-tab--active' : ''}`}
+              onClick={() => setView(t.id)}>
+              <span className="rail-tab-icon">{t.icon}</span> {t.label}
             </button>
           ))}
-        </div>
-        <select
-          className="mpf-instrument"
-          value={instrument}
-          onChange={e => setInstrument(e.target.value)}
-          aria-label="Choose your instrument"
-        >
-          {INSTRUMENTS.map(i => (
-            <option key={i.id} value={i.id}>{i.label}</option>
-          ))}
-        </select>
-      </nav>
+        </nav>
 
-      <main className="mpf-main">
-        <div style={{ display: tab === 'practice' ? 'block' : 'none' }}>
-          <PracticeApp />
+        <div className="rail-foot">
+          <label className="rail-inst-label" htmlFor="rail-inst">Instrument</label>
+          <select id="rail-inst" className="rail-inst"
+            value={instrument}
+            onChange={e => setInstrument(e.target.value)}
+            disabled={sessionActive}
+            title={sessionActive ? 'Locked while a session is running' : 'Choose your instrument'}>
+            {INSTRUMENT_CHOICES.map(i => (
+              <option key={i.id} value={i.id}>{i.label}</option>
+            ))}
+          </select>
         </div>
-        {tab === 'songs' && (
+      </aside>
+
+      {/* ── Main area ─────────────────────────────────────────────────── */}
+      <main className="main">
+        <div style={{ display: view === 'session' ? 'block' : 'none' }}>
+          <SessionFlow
+            instrument={instrument}
+            voice={voice}
+            onInstrument={setInstrument}
+            onVoice={setVoice}
+            sessions={sessions}
+            onSessionSaved={setSessions}
+            onStageChange={setSessionStage}
+          />
+        </div>
+        {view === 'songs' && (
           <SongsApp key={songTranspose} initialTranspose={songTranspose} />
         )}
-        {tab === 'fingerings' && <FingeringsApp instrument={instrument} />}
-        {tab === 'progress' && <ProgressApp />}
+        {view === 'fingerings' && <FingeringsApp instrument={instrument} />}
+        {view === 'schedule' && <ScheduleTab />}
+        {view === 'progress' && <ProgressTab sessions={sessions} />}
       </main>
     </div>
   )

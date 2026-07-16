@@ -1,14 +1,15 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// GrandStaff.jsx — SVG grand staff renderer
-// 8 notes per line (per staff system), then starts a new system below.
-// No separate treble clef glyph — drawn with simple geometric shapes.
+// GrandStaff.jsx — SVG grand staff renderer (from scale-practice, unchanged
+// visual language; imports moved to the new theory layer).
+// Splits into systems of 8 notes; geometric clefs, ledger lines, live
+// highlight on the active note.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useMemo } from 'react'
 import {
   parseNote, noteToStaffY, ledgerLineSteps, stepRelToY,
-  TREBLE_BOT_Y, BASS_BOT_Y, HALF_STEP_Y,
-} from '../utils/noteUtils'
+  TREBLE_BOT_Y,
+} from '../theory/notes'
 
 const TREBLE_LINES  = [60, 72, 84, 96, 108]
 const BASS_LINES    = [168, 180, 192, 204, 216]
@@ -18,7 +19,7 @@ const NOTE_RY       = 4.8
 const STEM_LEN      = 30
 const LEDGER_HALF   = 10
 const LINE_W        = 1.3
-const NOTES_PER_LINE = 8   // 8 notes per staff system
+const NOTES_PER_LINE = 8
 
 function StaffLines({ xs, xe, lines }) {
   return lines.map(y => (
@@ -92,8 +93,6 @@ function NoteHead({ x, y, fill, isActive, showName, noteStr, direction, seqNum }
   )
 }
 
-// ── Single staff system (one group of up to NOTES_PER_LINE notes) ─────────────
-
 function StaffSystem({ notes, color, activeIndex, globalOffset, showNames, peakIndex, onNoteClick }) {
   const n        = notes.length
   const LEFT_PAD = 65
@@ -127,7 +126,7 @@ function StaffSystem({ notes, color, activeIndex, globalOffset, showNames, peakI
       <line x1={17} y1={topY} x2={17} y2={botY} stroke="#4b5563" strokeWidth={3} />
       <GClef x={30} />
       <FClef x={30} />
-      {noteData.map(({ noteStr, x, y, clef, stepRel, fill, direction, gi }, i) => (
+      {noteData.map(({ noteStr, x, y, clef, stepRel, fill, direction, gi }) => (
         <g key={`${noteStr}-${gi}`} onClick={() => onNoteClick?.(noteStr)}>
           <LedgerLines x={x} stepRel={stepRel} clef={clef} />
           <NoteHead x={x} y={y} fill={fill} isActive={activeIndex === gi}
@@ -138,10 +137,9 @@ function StaffSystem({ notes, color, activeIndex, globalOffset, showNames, peakI
   )
 }
 
-// ── Main export: splits notes into groups of NOTES_PER_LINE ──────────────────
-
-export default function GrandStaff({ notes=[], color='#c084fc', activeIndex=-1, peakIndex=7, showNames=false, onNoteClick }) {
-  if (!notes.length) return <div className="staff-empty">Select a key and pattern.</div>
+export default function GrandStaff({ notes = [], color = '#c084fc', activeIndex = -1,
+                                     peakIndex = 7, showNames = false, onNoteClick }) {
+  if (!notes.length) return <div className="staff-empty">Nothing to show.</div>
 
   const chunks = []
   for (let i = 0; i < notes.length; i += NOTES_PER_LINE)
@@ -150,7 +148,7 @@ export default function GrandStaff({ notes=[], color='#c084fc', activeIndex=-1, 
   return (
     <div className="staff-scroll-outer">
       {chunks.map(({ notes: chunk, offset }) => (
-        <div key={offset} className="staff-block-wrap" style={{ overflowX:'auto', marginBottom:'16px' }}>
+        <div key={offset} className="staff-block-wrap" style={{ overflowX:'auto' }}>
           <StaffSystem
             notes={chunk} color={color}
             activeIndex={activeIndex} globalOffset={offset}

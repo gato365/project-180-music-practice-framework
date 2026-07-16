@@ -3,15 +3,7 @@
 // audio sounds concert pitch (written − 2 semitones).
 import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import './fingerings.css'
-
-// Fingering table for Bb trumpet (written pitch), by MIDI number
-const FING = {
-  54:[1,2,3],55:[1,3],56:[2,3],57:[1,2],58:[1],59:[2],
-  60:[],61:[1,2,3],62:[1,3],63:[2,3],64:[1,2],65:[1],66:[2],
-  67:[],68:[2,3],69:[1,2],70:[1],71:[2],
-  72:[],73:[1,2],74:[1],75:[2],76:[],77:[1],78:[2],
-  79:[],80:[2,3],81:[1,2],82:[1],83:[2],84:[],
-}
+import { TRUMPET_FING as FING } from '../theory/instruments'
 
 const KEYS = ['C','G','D','A','E','B','F','Bb','Eb','Ab','Db','F#']
 const PC = { C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11,Cb:11,'E#':5,'B#':0,Fb:4 }
