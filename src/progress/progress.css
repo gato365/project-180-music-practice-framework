@@ -1,0 +1,157 @@
+/* Progress module — uses the practice module's global design tokens */
+.progress-screen {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 28px 20px 60px;
+}
+
+.prog-header h1 { font-size: 24px; font-weight: 700; }
+.prog-sub { color: var(--muted); margin-top: 4px; font-size: 13px; }
+
+.prog-empty {
+  margin-top: 40px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--text);
+  font-size: 15px;
+}
+.prog-empty-hint { color: var(--muted); margin-top: 8px; font-size: 13px; }
+
+/* ── Stat tiles ──────────────────────────────────────────────────────────── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 22px 0 26px;
+}
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat-label {
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Bar chart ───────────────────────────────────────────────────────────── */
+.chart-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px 12px;
+  margin-bottom: 26px;
+}
+.chart-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 165px;
+  border-bottom: 1px solid var(--border);
+  padding: 0 2px;
+}
+.bar-col {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  height: 100%;
+  padding: 0;
+  cursor: default;
+}
+.bar-fill {
+  width: 60%;
+  max-width: 22px;
+  background: #a855f7;            /* validated vs --surface (#13151f): all checks pass */
+  border-radius: 4px 4px 0 0;     /* rounded data-end, flat at baseline */
+  transition: background .12s;
+}
+.bar-col:hover .bar-fill,
+.bar-col:focus-visible .bar-fill { background: #c084fc; }
+.bar-day {
+  position: absolute;
+  bottom: -20px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.bar-peak-label {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.bar-tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 5;
+  pointer-events: none;
+}
+.bar-col:hover .bar-tip,
+.bar-col:focus-visible .bar-tip { display: block; }
+.bar-chart { margin-bottom: 26px; }
+
+/* ── Session table ───────────────────────────────────────────────────────── */
+.prog-table-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  overflow-x: auto;
+}
+.prog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.prog-table th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.prog-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.prog-table tr:last-child td { border-bottom: none; }
+.td-dur { font-family: 'JetBrains Mono', monospace; }

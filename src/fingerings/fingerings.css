@@ -1,0 +1,177 @@
+/* Fingerings module — brass theme from trumpet-scales.html, scoped under .fing-module */
+.fing-module {
+  --f-bg: #100E0B;
+  --f-panel: #1B1812;
+  --f-panel-2: #221E16;
+  --f-brass: #D4A437;
+  --f-brass-bright: #F0C75E;
+  --f-cream: #F5EFE2;
+  --f-muted: #97907F;
+  --f-line: #2C2820;
+
+  background: var(--f-bg);
+  color: var(--f-cream);
+  font-family: 'Inter', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: calc(100vh - var(--nav-h));
+  padding: 14px 14px 20px;
+  user-select: none;
+}
+
+.fing-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.fing-header h1 {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800; letter-spacing: .04em;
+  font-size: 1.35rem; text-transform: uppercase; color: var(--f-brass);
+}
+.fing-note {
+  font-size: .8rem; color: var(--f-muted); margin-bottom: 12px; line-height: 1.5;
+  border: 1px solid var(--f-line); border-radius: 10px; padding: 10px 12px;
+  background: var(--f-panel);
+}
+.fing-module .sound-btn {
+  background: var(--f-panel); border: 1px solid var(--f-line); color: var(--f-muted);
+  border-radius: 999px; padding: 6px 14px; font-size: .78rem; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+}
+.fing-module .sound-btn.on { color: var(--f-bg); background: var(--f-brass); border-color: var(--f-brass); }
+
+/* Key picker */
+.fing-module .keys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
+.fing-module .key-btn {
+  background: var(--f-panel); border: 1px solid var(--f-line); color: var(--f-cream);
+  border-radius: 10px; padding: 10px 0; font-size: .95rem; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: background .12s, color .12s;
+}
+.fing-module .key-btn.active { background: var(--f-brass); color: var(--f-bg); border-color: var(--f-brass); }
+
+.fing-module .mode-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.fing-module .mode-btn {
+  flex: 1; background: var(--f-panel); border: 1px solid var(--f-line); color: var(--f-muted);
+  border-radius: 10px; padding: 9px 0; font-size: .85rem; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: background .12s, color .12s;
+}
+.fing-module .mode-btn.active { background: var(--f-panel-2); color: var(--f-brass-bright); border-color: var(--f-brass); }
+
+.fing-module .view-row { display: flex; gap: 6px; margin-bottom: 14px; }
+.fing-module .view-btn {
+  flex: 1; background: var(--f-panel); border: 1px solid var(--f-line); color: var(--f-muted);
+  border-radius: 10px; padding: 9px 0; font-size: .85rem; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: background .12s, color .12s;
+}
+.fing-module .view-btn.active { background: var(--f-brass); color: var(--f-bg); border-color: var(--f-brass); }
+
+/* Stage: current note + valves */
+.fing-module .stage {
+  background: linear-gradient(180deg, var(--f-panel-2), var(--f-panel));
+  border: 1px solid var(--f-line); border-radius: 18px;
+  padding: 18px 16px 22px; text-align: center; margin-bottom: 14px;
+  cursor: pointer;
+}
+.fing-module .scale-label {
+  font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--f-muted);
+  margin-bottom: 6px;
+}
+.fing-module .note-name {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800; font-size: 5.2rem; line-height: 1; color: var(--f-cream);
+  margin-bottom: 4px;
+}
+.fing-module .note-name sup { font-size: .45em; color: var(--f-brass-bright); }
+.fing-module .fingering-text {
+  font-size: 1rem; color: var(--f-brass-bright); font-weight: 600; letter-spacing: .08em;
+  margin-bottom: 18px; min-height: 1.3em;
+}
+
+/* Valves */
+.fing-module .valves { display: flex; justify-content: center; gap: 26px; }
+.fing-module .valve { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.fing-module .piston {
+  width: 58px; height: 88px; border-radius: 14px;
+  border: 2px solid var(--f-line);
+  background: linear-gradient(180deg, #26221A 0%, #1B1812 100%);
+  position: relative; overflow: hidden;
+  transition: border-color .15s;
+}
+.fing-module .piston::after {
+  content: ''; position: absolute; left: 6px; right: 6px; top: 8px; height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #5b5343, #3a342a);
+  transition: transform .14s ease, background .14s;
+}
+.fing-module .valve.pressed .piston { border-color: var(--f-brass); }
+.fing-module .valve.pressed .piston::after {
+  transform: translateY(34px);
+  background: linear-gradient(180deg, var(--f-brass-bright), var(--f-brass));
+}
+.fing-module .valve-num {
+  font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+  font-size: 1.05rem; color: var(--f-muted);
+}
+.fing-module .valve.pressed .valve-num { color: var(--f-brass-bright); }
+.fing-module .tap-hint { font-size: .7rem; color: var(--f-muted); margin-top: 14px; letter-spacing: .05em; }
+
+/* Scale strip */
+.fing-module .strip { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin-bottom: 14px; }
+.fing-module .step {
+  background: var(--f-panel); border: 1px solid var(--f-line); border-radius: 10px;
+  padding: 8px 0 7px; text-align: center; cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+.fing-module .step.current { border-color: var(--f-brass); background: var(--f-panel-2); }
+.fing-module .step-note { font-weight: 600; font-size: .85rem; color: var(--f-cream); }
+.fing-module .step.current .step-note { color: var(--f-brass-bright); }
+.fing-module .step-fing { font-size: .68rem; color: var(--f-muted); margin-top: 2px; letter-spacing: .06em; }
+
+/* Chart view */
+.fing-module .chart { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+.fing-module .card {
+  background: linear-gradient(180deg, var(--f-panel-2), var(--f-panel));
+  border: 1px solid var(--f-line); border-radius: 14px;
+  padding: 14px 10px 12px; text-align: center; cursor: pointer;
+}
+.fing-module .card:active { border-color: var(--f-brass); }
+.fing-module .card-degree {
+  font-size: .65rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--f-muted); margin-bottom: 4px;
+}
+.fing-module .card-note {
+  font-family: 'Big Shoulders Display', sans-serif; font-weight: 800;
+  font-size: 2.4rem; line-height: 1; color: var(--f-cream); margin-bottom: 8px;
+}
+.fing-module .card-note sup { font-size: .5em; color: var(--f-brass-bright); }
+.fing-module .mini-valves { display: flex; justify-content: center; gap: 8px; margin-bottom: 7px; }
+.fing-module .mini-valve {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid var(--f-line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
+  font-size: .85rem; color: var(--f-muted);
+  background: var(--f-bg);
+}
+.fing-module .mini-valve.on { background: var(--f-brass); border-color: var(--f-brass-bright); color: var(--f-bg); }
+.fing-module .card-fing { font-size: .78rem; color: var(--f-brass-bright); font-weight: 600; letter-spacing: .06em; }
+
+/* Prev / next */
+.fing-module .fing-nav { display: flex; gap: 10px; }
+.fing-module .nav-btn {
+  flex: 1; background: var(--f-panel); border: 1px solid var(--f-line); color: var(--f-cream);
+  border-radius: 12px; padding: 15px 0; font-size: 1rem; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: background .1s;
+}
+.fing-module .nav-btn:active { background: var(--f-panel-2); }
+.fing-module .nav-btn.primary { background: var(--f-brass); color: var(--f-bg); border-color: var(--f-brass); }
+.fing-module .nav-btn.primary:active { background: var(--f-brass-bright); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fing-module .piston::after { transition: none; }
+}
+.fing-module .key-btn:focus-visible, .fing-module .mode-btn:focus-visible,
+.fing-module .nav-btn:focus-visible, .fing-module .step:focus-visible,
+.fing-module .sound-btn:focus-visible, .fing-module .stage:focus-visible,
+.fing-module .view-btn:focus-visible, .fing-module .card:focus-visible {
+  outline: 2px solid var(--f-brass-bright); outline-offset: 2px;
+}
