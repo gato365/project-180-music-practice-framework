@@ -26,12 +26,15 @@ Setup → Plan preview → Run → Critique → Reflect → Summary
 2. **Plan preview** — the auto-generated plan with a short "why these" note.
    You can regenerate (next keys in rotation), nudge the BPM, toggle items
    off, enable recording — but the default path is just **Start**.
-3. **Run** — steps through scales → patterns group by group with dual live
-   timers (session vs target + current item), grand-staff notation, note
-   cards, trumpet valve fingerings, and audible playback everywhere
-   (▶ hear a group, ▶▶ play along through the whole item, click any note to
-   hear it). No-Instrument mode instead runs the tap-the-notes quiz with live
-   accuracy (from project-127).
+3. **Run** — the whole item is on the page as treble-staff notation: a
+   one-octave scale shows all 16 notes, 8 up on one line and 8 down on the
+   next (longer forms wrap the same way, breaking at direction changes).
+   **▶ Auto-play lesson** walks the entire plan item by item, highlighting
+   each note as it sounds so you mimic in real time; a "now playing" card
+   mirrors the current note (with valve fingerings on trumpet), tempo is a
+   live BPM input, and clicking any note plays just that note. Dual timers
+   track session-vs-target and the current item. No-Instrument mode instead
+   runs the tap-the-notes quiz with live accuracy (from project-127).
 4. **Critique** — tone / accuracy / time / technique on 1–5 scales. If you
    recorded, "estimate from recording (beta)" runs in-browser pitch detection
    and prefills accuracy + time; quiz accuracy prefills it in 🎧 mode. Tone

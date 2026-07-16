@@ -268,6 +268,36 @@ input,textarea,select{font-family:inherit}
 .rg-chip--done{color:var(--dim);border-color:var(--surface3)}
 .rg-chip--current{background:var(--surface3)}
 
+/* Now-playing card — the note to mimic */
+.now-card{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 18px;min-height:64px;transition:border-color .15s;
+}
+.now-card--live{background:var(--surface2)}
+.np-degree{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.np-note{font-size:38px;font-weight:800;line-height:1}
+.np-oct{font-size:15px;color:var(--muted);margin-left:2px}
+.np-fing{display:flex;align-items:center;gap:5px}
+.np-fing-label{font-size:10.5px;color:var(--muted);margin-left:4px}
+.np-hint{margin-left:auto;font-size:11px;color:var(--dim);font-style:italic}
+.np-idle{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+.bpm-box{display:flex;align-items:center;gap:6px;margin-left:auto}
+.bpm-step{
+  width:30px;height:30px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);font-size:15px;font-weight:800;
+}
+.bpm-step:hover{background:var(--surface3)}
+.bpm-input{
+  width:62px;padding:6px 4px;border-radius:8px;text-align:center;
+  background:var(--surface2);border:1px solid var(--border);color:var(--text);
+  font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;
+}
+.bpm-input:focus{outline:1px solid var(--accent)}
+.bpm-input::-webkit-inner-spin-button{opacity:1}
+.bpm-unit{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--dim)}
+
 .run-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:46px}
 .run-btn{
   padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:700;
